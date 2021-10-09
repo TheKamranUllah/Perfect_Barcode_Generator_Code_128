@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
 //getting permission as we are saving image to gallery
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+
             askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
         }
 
@@ -81,14 +82,11 @@ class MainActivity : AppCompatActivity() {
     //asking for permission
      @RequiresApi(Build.VERSION_CODES.M)
      open fun askForPermission(permission: String, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(this@MainActivity, permission)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this@MainActivity,
-                    permission
-                )
-            ) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity, permission) != PackageManager.PERMISSION_GRANTED) {
+
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, permission))
+            {
                 Toast.makeText(
                     this@MainActivity,
                     "Please grant the requested permission to get your task done!",
@@ -99,12 +97,9 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(permission),
                     requestCode
                 )
-            } else {
-                ActivityCompat.requestPermissions(
-                    this@MainActivity,
-                    arrayOf(permission),
-                    requestCode
-                )
+            } else
+            {
+                ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
 
                 //fifty characters
                 // displayBitmap("1234 65290 9855 65252 1234 65290 9855 65252 1234 567 89012")
@@ -114,11 +109,17 @@ class MainActivity : AppCompatActivity() {
 
                 //80 characters
                 displayBitmap("Apart from counting words and characters, our online editor can help  you to it.")
-
+//                Toast.makeText(
+//                    this@MainActivity,
+//                    "Method excuted",
+//                    Toast.LENGTH_LONG   ).show()
             }
+        } else
+        {
+            displayBitmap("Apart from counting words and characters, our online editor can help  you to it.")
+
         }
     }
-
 
 
     //Creating barcode and returning as bitmap
