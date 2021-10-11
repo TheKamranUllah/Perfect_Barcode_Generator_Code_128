@@ -11,10 +11,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
@@ -26,6 +22,7 @@ import java.io.OutputStream
 import androidx.core.app.ActivityCompat
 
 import android.content.pm.PackageManager
+import android.widget.*
 
 import androidx.core.content.ContextCompat
 
@@ -38,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     var image_barcode : ImageView? = null
     var saveBtn: Button? = null
     var bitmap: Bitmap? = null
+    var gbtn: Button? = null
+    var barcodeText: EditText? = null
 
 
 
@@ -50,13 +49,23 @@ class MainActivity : AppCompatActivity() {
      text_barcode_number = findViewById(R.id.text_barcode_number)
      image_barcode = findViewById(R.id.image_barcode)
      saveBtn = findViewById(R.id.button)
+     gbtn = findViewById(R.id.btnG)
+     barcodeText = findViewById(R.id.barcode_text)
 
 
-//getting permission as we are saving image to gallery
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
 
-            askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
-        }
+        gbtn!!.setOnClickListener(View.OnClickListener {
+
+      val myBarcodeData = barcodeText!!.text.toString()
+
+            //getting permission as we are saving image to gallery
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+
+                askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1, myBarcodeData);
+            }
+        })
+
+
 
 
 
@@ -81,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
     //asking for permission
      @RequiresApi(Build.VERSION_CODES.M)
-     open fun askForPermission(permission: String, requestCode: Int) {
+     open fun askForPermission(permission: String, requestCode: Int, barcodeData: String) {
         if (ContextCompat.checkSelfPermission(this@MainActivity, permission) != PackageManager.PERMISSION_GRANTED) {
 
 
@@ -108,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 //displayBitmap("Apart from counting words and characters, our online editor can help..")
 
                 //80 characters
-                displayBitmap("Apart from counting words and characters, our online editor can help  you to it.")
+                displayBitmap(barcodeData)
 //                Toast.makeText(
 //                    this@MainActivity,
 //                    "Method excuted",
@@ -116,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else
         {
-            displayBitmap("Apart from counting words and characters, our online editor can help  you to it.")
+            displayBitmap(barcodeData)
 
         }
     }
@@ -166,6 +175,7 @@ class MainActivity : AppCompatActivity() {
     //setting image and text values
     @RequiresApi(Build.VERSION_CODES.M)
     private fun displayBitmap(value: String) {
+
         val widthPixels = resources.getDimensionPixelSize(R.dimen.width_barcode)
         val heightPixels = resources.getDimensionPixelSize(R.dimen.height_barcode)
 
