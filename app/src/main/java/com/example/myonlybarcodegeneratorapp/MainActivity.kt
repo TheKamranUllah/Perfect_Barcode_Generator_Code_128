@@ -22,11 +22,11 @@ import java.io.OutputStream
 import androidx.core.app.ActivityCompat
 
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.widget.*
 
 import androidx.core.content.ContextCompat
-
-
+import java.lang.NullPointerException
 
 
 class MainActivity : AppCompatActivity() {
@@ -124,8 +124,17 @@ class MainActivity : AppCompatActivity() {
 //                    Toast.LENGTH_LONG   ).show()
             }
         } else
+        {  if(barcodeData.length > 80)
+        {
+            Toast.makeText(
+                this@MainActivity,
+                "Can not accept more than 80 characters",
+                Toast.LENGTH_LONG).show()
+        }else
         {
             displayBitmap(barcodeData)
+
+        }
 
         }
     }
@@ -139,6 +148,9 @@ class MainActivity : AppCompatActivity() {
         widthPixels: Int,
         heightPixels: Int
     ): Bitmap {
+
+        try{
+
         val bitMatrix = Code128Writer().encode(
             barcodeValue,
             BarcodeFormat.CODE_128,
@@ -169,7 +181,17 @@ class MainActivity : AppCompatActivity() {
             bitMatrix.width,
             bitMatrix.height
         )
-        return bitmap
+
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e: NullPointerException)
+        {
+            Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
+             bitmap  = BitmapFactory.decodeResource(applicationContext.getResources(),R.drawable.ic_launcher_foreground)
+            return bitmap!!
+        }
+        return bitmap!!
     }
 
     //setting image and text values
